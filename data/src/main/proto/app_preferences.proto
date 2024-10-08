@@ -14,6 +14,7 @@ message AppPreferences {
 
     CameraSource camera_source = 10;
     string external_camera_ip = 11;
+    CutFrameSource cut_frame = 12;
 
     // TODO: sample code. remove later.
     string sample_id = 999997;
@@ -24,4 +25,10 @@ message AppPreferences {
 enum CameraSource {
     CAMERA_SOURCE_INTERNAL = 0;
     CAMERA_SOURCE_EXTERNAL = 1;
+}
+
+enum CutFrameSource {
+    CUT_FRAME_SOURCE_MAKER_FAIRE = 0;
+    CUT_FRAME_SOURCE_FOURCUT_LIGHT = 1;
+    CUT_FRAME_SOURCE_FOURCUT_DARK = 2;
 }

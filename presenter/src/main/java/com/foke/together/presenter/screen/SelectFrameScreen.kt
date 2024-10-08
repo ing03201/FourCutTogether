@@ -17,6 +17,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.foke.together.domain.interactor.entity.CutFrameType
 import com.foke.together.presenter.R
 import com.foke.together.presenter.theme.FourCutTogetherTheme
 import com.foke.together.presenter.viewmodel.SelectFrameViewModel
@@ -38,9 +44,11 @@ fun SelectFrameScreen(
     viewModel: SelectFrameViewModel = hiltViewModel()
 ) {
     FourCutTogetherTheme {
-        val pagerState = rememberPagerState {
-            3 // 총 페이지 수 설정
-        }
+        val pageState = viewModel.cutFrameType.collectAsState(initial = CutFrameType.MAKER_FAIRE.ordinal)
+        val pagerState = rememberPagerState(
+            initialPage = pageState.value,
+            pageCount = { CutFrameType.entries.size }
+        )
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -101,14 +109,16 @@ fun SelectFrameScreen(
                 )
             ) { page ->
                 when(page){
-                    0 -> Image(painter = painterResource(id = R.drawable.fourcut_frame_medium_light), contentDescription = "fourcut_frame_medium_light")
-                    1 -> Image(painter = painterResource(id = R.drawable.fourcut_frame_medium_dark), contentDescription = "fourcut_frame_medium_dark")
-                    2 -> Image(painter = painterResource(id = R.drawable.maker_faire_frame), contentDescription = "maker_faire_frame")
+                    CutFrameType.MAKER_FAIRE.ordinal -> Image(painter = painterResource(id = R.drawable.maker_faire_frame), contentDescription = "fourcut_frame_medium_light")
+                    CutFrameType.FOURCUT_LIGHT.ordinal -> Image(painter = painterResource(id = R.drawable.fourcut_frame_medium_light), contentDescription = "fourcut_frame_medium_dark")
+                    CutFrameType.FOURCUT_DARK.ordinal -> Image(painter = painterResource(id = R.drawable.fourcut_frame_medium_dark), contentDescription = "maker_faire_frame")
                 }
+                viewModel.setCutFrameType(page)
             }
-
             IconButton(
-                onClick = { navigateToMethod() },
+                onClick = {
+                    navigateToMethod()
+              },
                 modifier = Modifier.constrainAs(frameSelectButton) {
                     top.linkTo(pager.bottom)
                     start.linkTo(startGuideLine)

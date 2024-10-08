@@ -3,7 +3,9 @@ package com.foke.together.data.repository
 import androidx.datastore.core.DataStore
 import com.foke.together.AppPreferences
 import com.foke.together.CameraSource
+import com.foke.together.CutFrameSource
 import com.foke.together.domain.interactor.entity.CameraSourceType
+import com.foke.together.domain.interactor.entity.CutFrameType
 import com.foke.together.domain.interactor.entity.ExternalCameraIP
 import com.foke.together.domain.output.AppPreferenceInterface
 import kotlinx.coroutines.flow.Flow
@@ -50,6 +52,33 @@ class AppPreferencesRepository @Inject constructor(
             it.toBuilder()
                 .setExternalCameraIp(ip.address)
                 .build()
+        }
+    }
+
+    override fun getCutFrameType(): Flow<CutFrameType> =
+        appPreferencesFlow.map {
+            it.cutFrame?.run {
+                when (this) {
+                    CutFrameSource.CUT_FRAME_SOURCE_MAKER_FAIRE -> CutFrameType.MAKER_FAIRE
+                    CutFrameSource.CUT_FRAME_SOURCE_FOURCUT_LIGHT -> CutFrameType.FOURCUT_LIGHT
+                    CutFrameSource.CUT_FRAME_SOURCE_FOURCUT_DARK -> CutFrameType.FOURCUT_DARK
+                    CutFrameSource.UNRECOGNIZED -> null
+                }
+            } ?: CutFrameType.MAKER_FAIRE // set to default CUT_FRAME_TYPE_1
+        }
+
+
+    override suspend fun setCutFrameType(type: CutFrameType) {
+        when(type) {
+            CutFrameType.MAKER_FAIRE -> CutFrameSource.CUT_FRAME_SOURCE_MAKER_FAIRE
+            CutFrameType.FOURCUT_LIGHT -> CutFrameSource.CUT_FRAME_SOURCE_FOURCUT_LIGHT
+            CutFrameType.FOURCUT_DARK -> CutFrameSource.CUT_FRAME_SOURCE_FOURCUT_DARK
+        }.apply {
+            appPreferences.updateData {
+                it.toBuilder()
+                    .setCutFrame(this)
+                    .build()
+            }
         }
     }
 

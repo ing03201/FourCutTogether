@@ -1,6 +1,7 @@
 package com.foke.together.domain.output
 
 import com.foke.together.domain.interactor.entity.CameraSourceType
+import com.foke.together.domain.interactor.entity.CutFrameType
 import com.foke.together.domain.interactor.entity.ExternalCameraIP
 import kotlinx.coroutines.flow.Flow
 
@@ -10,6 +11,9 @@ interface AppPreferenceInterface {
 
     fun getExternalCameraIP(): Flow<ExternalCameraIP>
     suspend fun setExternalCameraIP(ip: ExternalCameraIP)
+
+    fun getCutFrameType(): Flow<CutFrameType>
+    suspend fun setCutFrameType(type: CutFrameType)
 
     suspend fun clearAll()
 }

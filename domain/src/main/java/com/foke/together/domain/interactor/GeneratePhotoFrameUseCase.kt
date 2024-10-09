@@ -18,5 +18,6 @@ class GeneratePhotoFrameUseCase @Inject constructor(
 
     fun getCapturedImageListUri(): List<Uri> = imageRepositoryInterface.getPkgInternalUriList()
     suspend fun clearCapturedImageList() = imageRepositoryInterface.clearPkgInternal()
+    suspend fun saveGraphicsLayerImage(image: Bitmap, fileName: String) = imageRepositoryInterface.savePkgInternal(image, fileName)
     suspend fun saveFinalImage(image: Bitmap, fileName: String) = imageRepositoryInterface.saveExternal(image, fileName)
 }

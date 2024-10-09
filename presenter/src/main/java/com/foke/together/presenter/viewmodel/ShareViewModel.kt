@@ -7,5 +7,14 @@ import javax.inject.Inject
 @HiltViewModel
 class ShareViewModel @Inject constructor(
 ): ViewModel() {
-    // TODO: add viewmodel code here
+    fun shareImage() {
+
+    }
+    fun printImage() {
+
+    }
+
+    fun downloadImage() {
+
+    }
 }

@@ -6,11 +6,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.text.font.FontWeight
@@ -25,18 +24,19 @@ import com.foke.together.presenter.frame.FourCutFrame
 import com.foke.together.presenter.frame.MakerFaireFrame
 import com.foke.together.presenter.theme.FourCutTogetherTheme
 import com.foke.together.presenter.theme.mediumContrastLightColorScheme
-import com.foke.together.presenter.viewmodel.GenerateImageViewModel
-import kotlinx.coroutines.flow.map
+import com.foke.together.presenter.viewmodel.GenerateSingleRowImageViewModel
+import com.foke.together.util.AppLog
+import kotlinx.coroutines.launch
 
 @Composable
-fun GenerateImageScreen(
-    navigateToShare: () -> Unit,
+fun GenerateSingleRowImageScreen(
+    navigateToTwoRow: () -> Unit,
     popBackStack: () -> Unit,
-    viewModel: GenerateImageViewModel = hiltViewModel()
+    viewModel: GenerateSingleRowImageViewModel = hiltViewModel()
 ) {
 
     val graphicsLayer = rememberGraphicsLayer()
-
+    val coroutineScope = rememberCoroutineScope()
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -60,7 +60,7 @@ fun GenerateImageScreen(
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }
-                .aspectRatio(0.6666f)
+                .aspectRatio(0.3333f)
                 .drawWithContent {
                     graphicsLayer.record {
                         this@drawWithContent.drawContent()
@@ -72,40 +72,15 @@ fun GenerateImageScreen(
                 cutFrameType = viewModel.cutFrameType.ordinal,
                 imageUri = viewModel.imageUri
             )
-            GetFrame(
-                cutFrameType = viewModel.cutFrameType.ordinal,
-                imageUri = viewModel.imageUri
-            )
         }
     }
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        viewModel.generateImage(graphicsLayer).map { isCompleted ->
-            if (isCompleted) {
-                navigateToShare()
-            }
+        AppLog.d("GenerateSingleRowImageScreen", "LifecycleEventEffect: ON_RESUME", "${viewModel.imageUri}")
+        coroutineScope.launch {
+            viewModel.generateImage(graphicsLayer)
         }
-    }
-}
-
-
-@Composable
-fun GetFrame(cutFrameType : Int, imageUri: List<Uri>): Unit{
-    when(cutFrameType) {
-        CutFrameType.MAKER_FAIRE.ordinal -> MakerFaireFrame(
-            cameraImageUrlList = imageUri
-        )
-
-        CutFrameType.FOURCUT_LIGHT.ordinal -> FourCutFrame(
-            designColorScheme = mediumContrastLightColorScheme,
-            cameraImageUrlList = imageUri
-        )
-
-        CutFrameType.FOURCUT_DARK.ordinal -> FourCutFrame(
-            designColorScheme = mediumContrastLightColorScheme,
-            cameraImageUrlList = imageUri
-        )
-        else -> TODO()
+        navigateToTwoRow()
     }
 }
 
@@ -113,8 +88,8 @@ fun GetFrame(cutFrameType : Int, imageUri: List<Uri>): Unit{
 @Composable
 private fun DefaultFrame() {
     FourCutTogetherTheme {
-        GenerateImageScreen(
-            navigateToShare = {},
+        GenerateSingleRowImageScreen(
+            navigateToTwoRow = {},
             popBackStack = {}
         )
     }

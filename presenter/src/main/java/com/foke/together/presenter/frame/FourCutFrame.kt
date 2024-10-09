@@ -15,8 +15,14 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.layer.GraphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -25,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.foke.together.presenter.R
@@ -32,13 +40,15 @@ import com.foke.together.presenter.theme.FourCutTogetherTheme
 import com.foke.together.presenter.theme.highContrastDarkColorScheme
 import com.foke.together.presenter.theme.mediumContrastLightColorScheme
 import com.foke.together.util.AppPolicy
+import com.foke.together.util.ImageFileUtil
 import com.foke.together.util.TimeUtil
+import kotlinx.coroutines.launch
 
 @Composable
 fun FourCutFrame(
     // TODO: Need to refactoring. separate frame design with application theme
     designColorScheme: ColorScheme = mediumContrastLightColorScheme,
-    cameraImageUrlList : List<Uri>? = null,
+    cameraImageUrlList : List<Uri>? = null
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -46,11 +56,7 @@ fun FourCutFrame(
             .background(color = designColorScheme.surface)
             .border(1.dp, designColorScheme.inverseSurface)
     ) {
-        val (cameraColumn, decorateRow, decorateImage, curTime) = createRefs()
-        val logoImageGuideLineStart = createGuidelineFromStart(0.4f)
-        val logoImageGuideLineEnd = createGuidelineFromEnd(0.4f)
-        val imageLogoBarrier = createTopBarrier(cameraColumn, decorateImage)
-        val logoTextBarrier = createTopBarrier(decorateImage, curTime )
+        val (cameraColumn, decorateRow) = createRefs()
         LazyColumn(
             state = rememberLazyListState(),
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -58,7 +64,7 @@ fun FourCutFrame(
             modifier = Modifier
                 .constrainAs(cameraColumn) {
                     top.linkTo(parent.top)
-                    bottom.linkTo(decorateImage.top)
+                    bottom.linkTo(decorateRow.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints

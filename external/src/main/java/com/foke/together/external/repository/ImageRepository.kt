@@ -30,14 +30,21 @@ class ImageRepository @Inject constructor(
     }
 
     override fun getPkgInternalUriList(): List<Uri> {
-        return context.filesDir.listFiles()?.map {
-            Uri.fromFile(it)
-        } ?: emptyList()
+        var uriList = mutableListOf<Uri>()
+        context.filesDir.listFiles().forEach {
+            if(it.name.contains("capture")){
+                // capture로 시작하는 파일만 반환
+                uriList.add(Uri.fromFile(it))
+            }
+        }
+        return uriList
     }
 
     override suspend fun clearPkgInternal() {
-        context.filesDir.listFiles()?.forEach {
-            it.delete()
+        context.filesDir.listFiles().forEach {
+            if(it.name.contains(".jpg")){
+                it.delete()
+            }
         }
     }
 

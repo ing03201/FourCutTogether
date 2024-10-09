@@ -6,6 +6,7 @@ import android.content.Intent.createChooser
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Environment
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.core.content.ContextCompat.startActivity
@@ -16,28 +17,25 @@ import kotlin.coroutines.resume
 
 object ImageFileUtil {
 
-    suspend fun saveGraphicsLayer(
-        context: Context,
-        graphicsLayer: GraphicsLayer,
-        fileName: String
-    ): Uri {
-        var uri : Uri = Uri.EMPTY
-        val bitmap = graphicsLayer.toImageBitmap()
-        bitmap.asAndroidBitmap().saveToDisk(context, fileName)
-        return uri
-    }
-
-    suspend fun saveBitmap(
+    suspend fun saveBitmapInternal(
         context: Context,
         bitmap: Bitmap,
         fileName: String
     ): Uri {
-        var uri : Uri = Uri.EMPTY
-        bitmap.saveToDisk(context, fileName)
+        val uri = bitmap.saveToInternal(context, fileName)
         return uri
     }
 
-    private suspend fun Bitmap.saveToDisk(context: Context, fileName: String): Uri {
+    suspend fun saveBitmapMedia(
+        context: Context,
+        bitmap: Bitmap,
+        fileName: String
+    ): Uri {
+        val uri = bitmap.saveToMedia(context, fileName)
+        return uri
+    }
+
+    private suspend fun Bitmap.saveToInternal(context: Context, fileName: String): Uri {
         val file = File(
             context.filesDir,
             fileName + ".jpg"
@@ -45,7 +43,18 @@ object ImageFileUtil {
 
         file.writeBitmap(this, Bitmap.CompressFormat.JPEG, 100)
 
-        return scanFilePath(context, file.path) ?: throw Exception("File could not be saved")
+        return Uri.fromFile(file) ?: Uri.EMPTY
+    }
+
+    private suspend fun Bitmap.saveToMedia(context: Context, fileName: String): Uri {
+        val file = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            fileName + ".jpg"
+        )
+
+        file.writeBitmap(this, Bitmap.CompressFormat.JPEG, 100)
+
+        return scanFilePath(context, file.absolutePath) ?: throw Exception("File could not be saved")
     }
 
     private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {

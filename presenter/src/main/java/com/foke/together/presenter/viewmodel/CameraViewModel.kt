@@ -37,7 +37,7 @@ class CameraViewModel @Inject constructor(
             }
             override fun onFinish() {
                 viewModelScope.launch {
-                    captureWithExternalCameraUseCase()
+                    captureWithExternalCameraUseCase("capture_${_captureCount.value}")
                     _progressState.floatValue = 1f
                     if (_captureCount.intValue < AppPolicy.CAPTURE_COUNT) {
                         _captureCount.intValue += 1

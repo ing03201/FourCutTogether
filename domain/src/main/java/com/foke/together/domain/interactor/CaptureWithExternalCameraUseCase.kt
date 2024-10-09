@@ -1,20 +1,24 @@
 package com.foke.together.domain.interactor
 
+import android.content.Context
 import com.foke.together.domain.output.ExternalCameraRepositoryInterface
+import com.foke.together.domain.output.ImageRepositoryInterface
 import com.foke.together.util.AppLog
+import com.foke.together.util.ImageFileUtil
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class CaptureWithExternalCameraUseCase @Inject constructor(
-    private val externalCameraRepository: ExternalCameraRepositoryInterface
+    @ApplicationContext private val context: Context,
+    private val externalCameraRepository: ExternalCameraRepositoryInterface,
+    private val imageRepository: ImageRepositoryInterface
 ) {
-    suspend operator fun invoke(): Result<Unit> {
+    suspend operator fun invoke(fileName: String): Result<Unit> {
         externalCameraRepository.capture()
             .onSuccess {
                 // TODO: save Bitmap to internal storage
                 AppLog.i(TAG, "capture", "success: $it")
-
-                // TODO: implement file save code here ...
-
+                imageRepository.saveExternal(it, fileName)
                 return Result.success(Unit)
             }
             .onFailure {

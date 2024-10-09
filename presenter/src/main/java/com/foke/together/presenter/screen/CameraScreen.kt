@@ -36,13 +36,14 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 fun CameraScreen(
-    navigateToShare: () -> Unit,
+    navigateToGenerateImage: () -> Unit,
     popBackStack: () -> Unit,
     viewModel: CameraViewModel = hiltViewModel()
 ) {
     val TAG = "CameraScreen"
     var mjpegView: MjpegView? = null
     val externalCameraIP = viewModel.externalCameraIP
+    var frameCount = 0
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -102,10 +103,13 @@ fun CameraScreen(
                         }
 
                         override fun onNewFrame(image: Bitmap?) {
-                            AppLog.d(TAG, "onNewFrame")
                             // stream 한장 받을때마다 오는 콜백
                             //TODO: 화면 로딩(30프레임 이상) 후 재실행
-                            viewModel.startCaptureTimer()
+                            frameCount++
+                            if(frameCount > 20) {
+                                frameCount = 0
+                                viewModel.startCaptureTimer()
+                            }
                         }
 
                         override fun onError(error: MjpegViewError?) {
@@ -135,7 +139,7 @@ fun CameraScreen(
         )
     }
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
-        viewModel.setCaptureTimer { navigateToShare() }
+        viewModel.setCaptureTimer { navigateToGenerateImage() }
         AppLog.d(TAG, "ON_START", mjpegView.toString())
     }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -145,6 +149,7 @@ fun CameraScreen(
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         viewModel.stopCaptureTimer()
         AppLog.d(TAG, "ON_STOP", mjpegView.toString())
+        frameCount = 0
         mjpegView?.stopStream()
     }
 }
@@ -158,7 +163,7 @@ private fun DefaultPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             CameraScreen(
-                navigateToShare = {},
+                navigateToGenerateImage = {},
                 popBackStack = {}
             )
         }

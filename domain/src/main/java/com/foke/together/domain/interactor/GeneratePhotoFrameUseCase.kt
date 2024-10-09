@@ -13,7 +13,7 @@ class GeneratePhotoFrameUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val imageRepositoryInterface: ImageRepositoryInterface
 ){
-    fun getCutFrameType(type: Int): Flow<CutFrameType> = imageRepositoryInterface.getCutFrameType(type)
+    fun getCutFrameType(): CutFrameType = imageRepositoryInterface.getCutFrameType()
     suspend fun setCutFrameType(type: Int) = imageRepositoryInterface.setCutFrameType(type)
 
     fun getCapturedImageListUri(): List<Uri> = imageRepositoryInterface.getPkgInternalUriList()

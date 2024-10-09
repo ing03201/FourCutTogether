@@ -18,11 +18,11 @@ import javax.inject.Inject
 class ImageRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ): ImageRepositoryInterface{
-    private val cutFrameTypeFlow: MutableStateFlow<CutFrameType> = MutableStateFlow(CutFrameType.MAKER_FAIRE)
+    private var cutFrameType: CutFrameType = CutFrameType.MAKER_FAIRE
 
-    override fun getCutFrameType(type: Int): Flow<CutFrameType> = cutFrameTypeFlow
+    override fun getCutFrameType(): CutFrameType = cutFrameType
     override suspend fun setCutFrameType(type: Int) {
-        cutFrameTypeFlow.emit(CutFrameType.findBy(type))
+        cutFrameType = CutFrameType.findBy(type)
     }
 
     override suspend fun savePkgInternal(image: Bitmap, fileName: String): Uri {

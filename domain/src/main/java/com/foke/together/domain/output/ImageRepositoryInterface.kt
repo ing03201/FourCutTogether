@@ -7,7 +7,7 @@ import com.foke.together.domain.interactor.entity.CutFrameType
 import kotlinx.coroutines.flow.Flow
 
 interface ImageRepositoryInterface {
-    fun getCutFrameType(type: Int): Flow<CutFrameType>
+    fun getCutFrameType(): CutFrameType
     suspend fun setCutFrameType(type: Int)
     // 촬영한 사진들 모음
     suspend fun savePkgInternal(image: Bitmap, fileName: String) : Uri

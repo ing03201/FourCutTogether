@@ -18,7 +18,10 @@ class CaptureWithExternalCameraUseCase @Inject constructor(
             .onSuccess {
                 // TODO: save Bitmap to internal storage
                 AppLog.i(TAG, "capture", "success: $it")
-                imageRepository.saveExternal(it, fileName)
+//                if(it == null) {
+//                    return Result.failure(Exception("Bitmap is null"))
+//                }
+//                imageRepository.saveExternal(it, fileName)
                 return Result.success(Unit)
             }
             .onFailure {

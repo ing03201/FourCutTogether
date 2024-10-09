@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.foke.together.presenter.screen.CameraScreen
+import com.foke.together.presenter.screen.GenerateImageScreen
 import com.foke.together.presenter.screen.HomeScreen
 import com.foke.together.presenter.screen.SelectFrameScreen
 import com.foke.together.presenter.screen.SelectMethodScreen
@@ -23,6 +24,7 @@ fun NavGraph(navController: NavHostController) {
         addSelectFrameScreen(navController, this)
         addSelectMethodScreen(navController, this)
         addCameraScreen(navController, this)
+        addGenerateImageScreen(navController, this)
         addShareScreen(navController, this)
     }
 }
@@ -82,11 +84,27 @@ private fun addCameraScreen(
 ) {
     navGraphBuilder.composable(route = NavRoute.Camera.path) {
         CameraScreen(
+            navigateToGenerateImage = {
+                navController.navigate(NavRoute.GenerateImage.path)
+            },
+            popBackStack = {
+                navController.popBackStack(NavRoute.Home.path, inclusive = false)
+            }
+        )
+    }
+}
+
+private fun addGenerateImageScreen(
+    navController: NavHostController,
+    navGraphBuilder: NavGraphBuilder
+) {
+    navGraphBuilder.composable(route = NavRoute.GenerateImage.path) {
+        GenerateImageScreen(
             navigateToShare = {
                 navController.navigate(NavRoute.Share.path)
             },
             popBackStack = {
-                 navController.popBackStack(NavRoute.Home.path, inclusive = false)
+                navController.popBackStack(NavRoute.Home.path, inclusive = false)
             }
         )
     }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.foke.together.domain.interactor.CaptureWithExternalCameraUseCase
+import com.foke.together.domain.interactor.GeneratePhotoFrameUseCase
 import com.foke.together.domain.interactor.GetExternalCameraPreviewUrlUseCase
 import com.foke.together.util.AppPolicy
 import com.foke.together.util.AppPolicy.CAPTURE_INTERVAL
@@ -53,8 +54,6 @@ class CameraViewModel @Inject constructor(
     }
 
     fun startCaptureTimer() = viewModelScope.launch{
-        // TODO: Capture 후 Preview 로딩까지의 Delay 구현하기
-        delay(5000)
         if(captureTimer != null){
             if(!mTimerState){
                 mTimerState = true

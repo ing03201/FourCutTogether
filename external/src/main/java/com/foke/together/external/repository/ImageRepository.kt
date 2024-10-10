@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import com.foke.together.domain.interactor.entity.CutFrameType
 import com.foke.together.domain.output.ImageRepositoryInterface
+import com.foke.together.util.AppPolicy
 import com.foke.together.util.ImageFileUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +33,7 @@ class ImageRepository @Inject constructor(
     override fun getCachedImageUriList(): List<Uri> {
         var uriList = mutableListOf<Uri>()
         context.cacheDir.listFiles().forEach {
-            if(it.name.contains("capture")){
+            if(it.name.contains(AppPolicy.CAPTURED_FOUR_CUT_IMAGE_NAME)){
                 // capture로 시작하는 파일만 반환
                 uriList.add(Uri.fromFile(it))
             }

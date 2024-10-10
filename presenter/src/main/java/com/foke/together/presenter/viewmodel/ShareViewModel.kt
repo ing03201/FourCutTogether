@@ -28,6 +28,6 @@ class ShareViewModel @Inject constructor(
     }
 
     fun downloadImage() {
-        
+
     }
 }

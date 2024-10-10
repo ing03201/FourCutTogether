@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.foke.together.domain.interactor.GeneratePhotoFrameUseCase
 import com.foke.together.domain.interactor.entity.CutFrameType
 import com.foke.together.util.AppLog
+import com.foke.together.util.AppPolicy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -21,8 +22,7 @@ class GenerateTwoRowImageViewModel @Inject constructor(
 
     suspend fun generateImage(graphicsLayer: GraphicsLayer) {
         val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
-        val finalExternalImageUri = generatePhotoFrameUseCase.saveGraphicsLayerImage(bitmap, "final_two_row")
-        val finalInternalImageUri = generatePhotoFrameUseCase.saveFinalImage(bitmap, "final_two_row")
+        val finalExternalImageUri = generatePhotoFrameUseCase.saveGraphicsLayerImage(bitmap, AppPolicy.TWO_ROW_FINAL_IMAGE_NAME)
         AppLog.d("GenerateImageViewModel", "generateTwoRowImage" ,"twoRow: $finalExternalImageUri")
     }
 }

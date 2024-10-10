@@ -49,7 +49,7 @@ class CameraViewModel @Inject constructor(
             override fun onFinish() {
                 viewModelScope.launch {
                     val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
-                    generatePhotoFrameUseCase.saveGraphicsLayerImage(bitmap, "capture_${_captureCount.value}")
+                    generatePhotoFrameUseCase.saveGraphicsLayerImage(bitmap, "${AppPolicy.CAPTURED_FOUR_CUT_IMAGE_NAME}_${_captureCount.value}")
                     _progressState.floatValue = 1f
                     if (_captureCount.intValue < AppPolicy.CAPTURE_COUNT) {
                         _captureCount.intValue += 1

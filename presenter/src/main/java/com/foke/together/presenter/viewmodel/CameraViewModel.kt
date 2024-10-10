@@ -57,7 +57,6 @@ class CameraViewModel @Inject constructor(
                     } else {
                         stopCaptureTimer()
                         _captureCount.intValue = 1
-                        delay(CAPTURE_INTERVAL)
                         nextNavigate()
                     }
                 }

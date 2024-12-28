@@ -44,7 +44,7 @@ fun SelectFrameScreen(
 ) {
     FourCutTogetherTheme {
         val pagerState = rememberPagerState(
-            initialPage = CutFrameType.MAKER_FAIRE.ordinal
+            initialPage = CutFrameType.SKY_BLUE.ordinal
         ) {
             CutFrameType.entries.size // 총 페이지 수 설정
         }
@@ -108,7 +108,7 @@ fun SelectFrameScreen(
                 )
             ) { page ->
                 when(page){
-                    CutFrameType.MAKER_FAIRE.ordinal -> {
+                    CutFrameType.YELLOW.ordinal -> {
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
@@ -116,9 +116,9 @@ fun SelectFrameScreen(
                                     viewModel.setCutFrameType(pagerState.currentPage)
                                     navigateToMethod()
                                 }
-                        ) { Image(painter = painterResource(id = R.drawable.maker_faire_frame), contentDescription = "maker_faire_frame") }
+                        ) { Image(painter = painterResource(id = R.drawable.wedding_otter_yellow_preview), contentDescription = "wedding_otter_yellow") }
                     }
-                    CutFrameType.FOURCUT_LIGHT.ordinal -> {
+                    CutFrameType.SKY_BLUE.ordinal -> {
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
@@ -127,9 +127,9 @@ fun SelectFrameScreen(
                                     navigateToMethod()
                                 }
 
-                        ) { Image(painter = painterResource(id = R.drawable.fourcut_frame_medium_light), contentDescription = "fourcut_frame_medium_light") }
+                        ) { Image(painter = painterResource(id = R.drawable.wedding_otter_skyblue_preview), contentDescription = "wedding_otter_skyblue") }
                     }
-                    CutFrameType.FOURCUT_DARK.ordinal -> {
+                    CutFrameType.MAGENTA.ordinal -> {
                         Box(
                             modifier = Modifier
                                 .clickable {
@@ -137,7 +137,7 @@ fun SelectFrameScreen(
                                     navigateToMethod()
                                 },
                             contentAlignment = Alignment.Center
-                        ) { Image(painter = painterResource(id = R.drawable.fourcut_frame_medium_dark), contentDescription = "fourcut_frame_medium_dark") }
+                        ) { Image(painter = painterResource(id = R.drawable.wedding_otter_magenta_preview), contentDescription = "wedding_otter_magenta") }
                     }
                 }
             }
@@ -170,7 +170,7 @@ fun SelectFrameScreen(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    FourCutTogetherTheme() {
+    FourCutTogetherTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background

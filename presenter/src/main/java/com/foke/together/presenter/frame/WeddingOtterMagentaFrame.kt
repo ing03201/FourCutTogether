@@ -1,6 +1,7 @@
 package com.foke.together.presenter.frame
 
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,16 +17,13 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.graphics.layer.GraphicsLayer
-import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,8 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.foke.together.domain.interactor.entity.FramePosition
@@ -43,14 +39,12 @@ import com.foke.together.presenter.R
 import com.foke.together.presenter.theme.FourCutTogetherTheme
 import com.foke.together.presenter.theme.highContrastDarkColorScheme
 import com.foke.together.presenter.theme.mediumContrastLightColorScheme
-import com.foke.together.presenter.theme.weddingOtterYellow
+import com.foke.together.presenter.theme.weddingOtterMagenta
 import com.foke.together.util.AppPolicy
-import com.foke.together.util.ImageFileUtil
 import com.foke.together.util.TimeUtil
-import kotlinx.coroutines.launch
 
 @Composable
-fun FourCutFrame(
+fun WeddingOtterMagentaFrame(
     // TODO: Need to refactoring. separate frame design with application theme
     designColorScheme: ColorScheme = mediumContrastLightColorScheme,
     cameraImageUrlList : List<Uri>? = null,
@@ -59,7 +53,7 @@ fun FourCutFrame(
     ConstraintLayout(
         modifier = Modifier
             .aspectRatio(ratio = 0.3333f)
-            .background(color = weddingOtterYellow)
+            .background(color = weddingOtterMagenta)
             .border(1.dp, designColorScheme.inverseSurface)
             .padding(
                 start = position.let {
@@ -99,7 +93,7 @@ fun FourCutFrame(
                 Box(
                     modifier = Modifier
                         .aspectRatio(1.5f)
-                        .background(color = designColorScheme.inverseSurface)
+                        .background(color = Color.White)
                 ){
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
@@ -124,18 +118,15 @@ fun FourCutFrame(
                 },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector =  ImageVector.vectorResource(
-                    id = R.drawable.fourcut_together
-                ),
+            Image(
+                painter = painterResource(R.drawable.wedding_otter_magenta),
                 contentDescription = "for decorate",
-                modifier = Modifier.weight(1f),
-                tint = designColorScheme.primaryContainer
+                modifier = Modifier.weight(1f)
             )
             Text(
                 text = TimeUtil.getCurrentDisplayTime(),
                 modifier = Modifier.weight(1f),
-                color = designColorScheme.inverseSurface,
+                color = Color.White,
                 fontSize = 15.sp,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
@@ -148,7 +139,7 @@ fun FourCutFrame(
 @Composable
 private fun DefaultFrame() {
     FourCutTogetherTheme {
-        FourCutFrame(
+        WeddingOtterMagentaFrame(
             designColorScheme = highContrastDarkColorScheme
         )
     }

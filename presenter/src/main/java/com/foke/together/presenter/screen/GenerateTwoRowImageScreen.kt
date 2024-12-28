@@ -22,6 +22,9 @@ import com.foke.together.domain.interactor.entity.CutFrameType
 import com.foke.together.domain.interactor.entity.FramePosition
 import com.foke.together.presenter.frame.FourCutFrame
 import com.foke.together.presenter.frame.MakerFaireFrame
+import com.foke.together.presenter.frame.WeddingOtterMagentaFrame
+import com.foke.together.presenter.frame.WeddingOtterSkyBlueFrame
+import com.foke.together.presenter.frame.WeddingOtterYellowFrame
 import com.foke.together.presenter.theme.FourCutTogetherTheme
 import com.foke.together.presenter.theme.mediumContrastDarkColorScheme
 import com.foke.together.presenter.theme.mediumContrastLightColorScheme
@@ -99,18 +102,18 @@ fun GetFrame(
     position: FramePosition? = null
 ) {
     when(cutFrameType) {
-        CutFrameType.MAKER_FAIRE.ordinal -> MakerFaireFrame(
+        CutFrameType.YELLOW.ordinal -> WeddingOtterYellowFrame(
             cameraImageUrlList = imageUri,
             position = position
         )
 
-        CutFrameType.FOURCUT_LIGHT.ordinal -> FourCutFrame(
+        CutFrameType.SKY_BLUE.ordinal -> WeddingOtterSkyBlueFrame(
             designColorScheme = mediumContrastLightColorScheme,
             cameraImageUrlList = imageUri,
             position = position
         )
 
-        CutFrameType.FOURCUT_DARK.ordinal -> FourCutFrame(
+        CutFrameType.MAGENTA.ordinal -> WeddingOtterMagentaFrame(
             designColorScheme = mediumContrastDarkColorScheme,
             cameraImageUrlList = imageUri,
             position = position

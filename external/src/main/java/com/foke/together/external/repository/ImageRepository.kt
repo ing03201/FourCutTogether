@@ -19,7 +19,7 @@ import javax.inject.Inject
 class ImageRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ): ImageRepositoryInterface{
-    private var cutFrameType: CutFrameType = CutFrameType.MAKER_FAIRE
+    private var cutFrameType: CutFrameType = CutFrameType.SKY_BLUE
 
     override fun getCutFrameType(): CutFrameType = cutFrameType
     override suspend fun setCutFrameType(type: Int) {

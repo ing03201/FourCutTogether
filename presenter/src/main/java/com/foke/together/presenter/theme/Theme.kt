@@ -250,6 +250,10 @@ val unspecified_scheme = ColorFamily(
     Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
 )
 
+val weddingOtterYellow = Color(0xFFFBF7E8)
+val weddingOtterSkyBlue = Color(0xFFE7EFFE)
+val weddingOtterMagenta = Color(0xFFF3ECFA)
+
 @Composable
 fun FourCutTogetherTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
